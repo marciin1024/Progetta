@@ -16,7 +16,6 @@ namespace Progetta.Entities
         public int OwnerId { get; set; }
         public User Owner { get; set; }
         public ICollection<Task> Tasks { get; set;}
-        public ICollection<Comment> Comments { get; set; }
         public ICollection<UserProject> UserProjects { get; set; }
         
     }

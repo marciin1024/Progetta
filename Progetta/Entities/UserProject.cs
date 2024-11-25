@@ -6,8 +6,8 @@ namespace Progetta.Entities
     public class UserProject
     {
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int UsernameId { get; set; }
+        public User Username { get; set; }
 
         [ForeignKey(nameof(Project))]
         public int ProjectId { get; set; }

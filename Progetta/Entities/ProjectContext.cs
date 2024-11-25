@@ -24,7 +24,13 @@ namespace Progetta.Entities
                .HasKey(tt => new { tt.TaskId, tt.TagId });
 
             modelBuilder.Entity<UserProject>()
-                .HasKey(up => new { up.UserId, up.ProjectId });
+                .HasKey(up => new { up.UsernameId, up.ProjectId });
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Comment>()
                .HasOne(c => c.Task)
@@ -32,17 +38,11 @@ namespace Progetta.Entities
                .HasForeignKey(c => c.TaskId)
                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Comment>()
-                .HasOne(c => c.Project)
-                .WithMany(p => p.Comments)
-                .HasForeignKey(c => c.ProjectId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             modelBuilder.Entity<UserProject>()
-                .HasOne(up => up.User)
-                .WithMany(u => u.CollaboratedProjects)
-                .HasForeignKey(up => up.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(up => up.Username)
+                .WithMany()
+                .HasForeignKey(up => up.UsernameId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserProject>()
                 .HasOne(up => up.Project)
