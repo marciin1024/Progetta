@@ -7,7 +7,7 @@ namespace Progetta.Entities
     {
         [ForeignKey(nameof(Task))]
         public int TaskId { get; set; }
-        public Task Task { get; set; }
+        public TaskToDo Task { get; set; }
 
         [ForeignKey(nameof(Tag))]
         public int TagId { get; set; }

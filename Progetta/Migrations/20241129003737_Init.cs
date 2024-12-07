@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Progetta.Migrations
 {
     /// <inheritdoc />
@@ -65,7 +67,7 @@ namespace Progetta.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tasks",
+                name: "TasksToDo",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -82,15 +84,15 @@ namespace Progetta.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.PrimaryKey("PK_TasksToDo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tasks_Projects_ProjectId",
+                        name: "FK_TasksToDo_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tasks_Users_AssignedToId",
+                        name: "FK_TasksToDo_Users_AssignedToId",
                         column: x => x.AssignedToId,
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -144,9 +146,9 @@ namespace Progetta.Migrations
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Tasks_TaskId",
+                        name: "FK_Comments_TasksToDo_TaskId",
                         column: x => x.TaskId,
-                        principalTable: "Tasks",
+                        principalTable: "TasksToDo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -174,12 +176,67 @@ namespace Progetta.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TaskTags_Tasks_TaskId",
+                        name: "FK_TaskTags_TasksToDo_TaskId",
                         column: x => x.TaskId,
-                        principalTable: "Tasks",
+                        principalTable: "TasksToDo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Tags",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Web" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "Role" },
+                values: new object[,]
+                {
+                    { 1, "marcin@gmail.com", "Marcin", "Nowak", "1234", 0 },
+                    { 2, "sebastian@gmail.com", "Sebastian", "Kowalski", "1234", 1 },
+                    { 3, "leszek@gmail.com", "Leszek", "Malinowski", "1234", 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Projects",
+                columns: new[] { "Id", "CreatedAt", "Description", "Name", "OwnerId", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6367), "To jest opis projektu", "Pierwszy projekt", 1, null },
+                    { 2, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6371), "To jest opis projektu", "Drugi projekt", 2, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "TasksToDo",
+                columns: new[] { "Id", "AssignedToId", "CreatedAt", "Description", "DueDate", "Name", "Priority", "ProjectId", "Status", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { 1, null, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6450), null, null, "Pierwsze zadanie", 1, 1, 0, null },
+                    { 2, 2, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6456), null, new DateTime(2024, 11, 29, 1, 37, 37, 188, DateTimeKind.Local).AddTicks(6462), "Drugie zadanie", 2, 2, 0, null },
+                    { 3, null, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6505), null, new DateTime(2024, 11, 29, 1, 37, 37, 188, DateTimeKind.Local).AddTicks(6506), "Trzecie zadanie", 0, 2, 2, null },
+                    { 4, 1, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6508), "To jest opis zadania", null, "Czwarte zadanie", 2, 1, 0, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserProjects",
+                columns: new[] { "ProjectId", "UsernameId", "CreatedAt", "Role", "UserId" },
+                values: new object[] { 2, 1, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6591), 1, null });
+
+            migrationBuilder.InsertData(
+                table: "Comments",
+                columns: new[] { "Id", "CreatedAt", "Message", "TaskId", "UpdatedAt", "UserId" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6529), "Lubię to!", 1, null, 1 },
+                    { 2, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6533), "Super!", 2, null, 1 },
+                    { 3, new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6534), "Wow!", 1, null, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "TaskTags",
+                columns: new[] { "TagId", "TaskId" },
+                values: new object[] { 1, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_TaskId",
@@ -197,13 +254,13 @@ namespace Progetta.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_AssignedToId",
-                table: "Tasks",
+                name: "IX_TasksToDo_AssignedToId",
+                table: "TasksToDo",
                 column: "AssignedToId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_ProjectId",
-                table: "Tasks",
+                name: "IX_TasksToDo_ProjectId",
+                table: "TasksToDo",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
@@ -238,7 +295,7 @@ namespace Progetta.Migrations
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Tasks");
+                name: "TasksToDo");
 
             migrationBuilder.DropTable(
                 name: "Projects");

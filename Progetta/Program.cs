@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Progetta.Components;
 using Progetta.Entities;
+using Progetta.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<TaskService>();
 
 builder.Services.AddDbContext<ProjectContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("ProjectConnectionString"))

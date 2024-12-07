@@ -13,7 +13,7 @@ namespace Progetta.Entities
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<TaskToDo> TasksToDo { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<TaskTag> TaskTags { get; set; }
         public DbSet<UserProject> UserProjects { get; set; }
@@ -50,6 +50,12 @@ namespace Progetta.Entities
                 .HasForeignKey(up => up.ProjectId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+           modelBuilder.Entity<TaskToDo>()
+               .HasOne(t => t.CreatedBy)
+               .WithMany(u => u.CreatedTasks) 
+               .HasForeignKey(t => t.CreatedById)
+               .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<User>()
                 .HasData(new User { Id = 1, FirstName = "Marcin", LastName = "Nowak", Email = "marcin@gmail.com", Password = "1234", Role = UserRole.Admin },
                 new User { Id = 2, FirstName = "Sebastian", LastName = "Kowalski", Email = "sebastian@gmail.com", Password = "1234", Role = UserRole.User },
@@ -74,33 +80,33 @@ namespace Progetta.Entities
 
 
 
-            modelBuilder.Entity<Task>().
-                HasData(new Task
+            modelBuilder.Entity<TaskToDo>().
+                HasData(new TaskToDo
                 {
                     Id = 1,
                     Name = "Pierwsze zadanie",
                     ProjectId = 1,
                 },
-                new Task
+                new TaskToDo
                 {
                     Id = 2,
                     Name = "Drugie zadanie",
                     ProjectId = 2,
                     Priority = TaskPriority.High,
-                    Status = TaskStatus.ToDo,
+                    Status = Status.ToDo,
                     DueDate = DateTime.Now,
                     AssignedToId = 2,
                 },
-                new Task
+                new TaskToDo
                 {
                     Id = 3,
                     Name = "Trzecie zadanie",
                     ProjectId = 2,
                     Priority = TaskPriority.Low,
-                    Status = TaskStatus.Done,
+                    Status = Status.Done,
                     DueDate = DateTime.Now,
                 },
-                new Task
+                new TaskToDo
                 {
                     Id = 4,
                     Name = "Czwarte zadanie",

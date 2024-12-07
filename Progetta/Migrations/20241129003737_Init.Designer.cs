@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Progetta.Entities;
 
@@ -11,9 +12,11 @@ using Progetta.Entities;
 namespace Progetta.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    partial class ProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20241129003737_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,23 +24,6 @@ namespace Progetta.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Progetta.Entities.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Category");
-                });
 
             modelBuilder.Entity("Progetta.Entities.Comment", b =>
                 {
@@ -75,7 +61,7 @@ namespace Progetta.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1414),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6529),
                             Message = "Lubię to!",
                             TaskId = 1,
                             UserId = 1
@@ -83,7 +69,7 @@ namespace Progetta.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1416),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6533),
                             Message = "Super!",
                             TaskId = 2,
                             UserId = 1
@@ -91,7 +77,7 @@ namespace Progetta.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1417),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6534),
                             Message = "Wow!",
                             TaskId = 1,
                             UserId = 2
@@ -106,20 +92,11 @@ namespace Progetta.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("EndAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -129,15 +106,10 @@ namespace Progetta.Migrations
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StartAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OwnerId");
 
@@ -147,7 +119,7 @@ namespace Progetta.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1317),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6367),
                             Description = "To jest opis projektu",
                             Name = "Pierwszy projekt",
                             OwnerId = 1
@@ -155,7 +127,7 @@ namespace Progetta.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1321),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6371),
                             Description = "To jest opis projektu",
                             Name = "Drugi projekt",
                             OwnerId = 2
@@ -223,16 +195,10 @@ namespace Progetta.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CreatedById")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("EndAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -246,9 +212,6 @@ namespace Progetta.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StartAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -259,8 +222,6 @@ namespace Progetta.Migrations
 
                     b.HasIndex("AssignedToId");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("ProjectId");
 
                     b.ToTable("TasksToDo");
@@ -269,7 +230,7 @@ namespace Progetta.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1342),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6450),
                             Name = "Pierwsze zadanie",
                             Priority = 1,
                             ProjectId = 1,
@@ -279,8 +240,8 @@ namespace Progetta.Migrations
                         {
                             Id = 2,
                             AssignedToId = 2,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1344),
-                            DueDate = new DateTime(2024, 12, 7, 21, 32, 56, 280, DateTimeKind.Local).AddTicks(1349),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6456),
+                            DueDate = new DateTime(2024, 11, 29, 1, 37, 37, 188, DateTimeKind.Local).AddTicks(6462),
                             Name = "Drugie zadanie",
                             Priority = 2,
                             ProjectId = 2,
@@ -289,8 +250,8 @@ namespace Progetta.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1391),
-                            DueDate = new DateTime(2024, 12, 7, 21, 32, 56, 280, DateTimeKind.Local).AddTicks(1392),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6505),
+                            DueDate = new DateTime(2024, 11, 29, 1, 37, 37, 188, DateTimeKind.Local).AddTicks(6506),
                             Name = "Trzecie zadanie",
                             Priority = 0,
                             ProjectId = 2,
@@ -300,7 +261,7 @@ namespace Progetta.Migrations
                         {
                             Id = 4,
                             AssignedToId = 1,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1394),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6508),
                             Description = "To jest opis zadania",
                             Name = "Czwarte zadanie",
                             Priority = 2,
@@ -403,7 +364,7 @@ namespace Progetta.Migrations
                         {
                             UsernameId = 1,
                             ProjectId = 2,
-                            CreatedAt = new DateTime(2024, 12, 7, 20, 32, 56, 280, DateTimeKind.Utc).AddTicks(1467),
+                            CreatedAt = new DateTime(2024, 11, 29, 0, 37, 37, 188, DateTimeKind.Utc).AddTicks(6591),
                             Role = 1
                         });
                 });
@@ -428,17 +389,11 @@ namespace Progetta.Migrations
 
             modelBuilder.Entity("Progetta.Entities.Project", b =>
                 {
-                    b.HasOne("Progetta.Entities.Category", "Category")
-                        .WithMany("Projects")
-                        .HasForeignKey("CategoryId");
-
                     b.HasOne("Progetta.Entities.User", "Owner")
                         .WithMany("OwnedProjects")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
 
                     b.Navigation("Owner");
                 });
@@ -468,11 +423,6 @@ namespace Progetta.Migrations
                         .WithMany("AssignedTasks")
                         .HasForeignKey("AssignedToId");
 
-                    b.HasOne("Progetta.Entities.User", "CreatedBy")
-                        .WithMany("CreatedTasks")
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Progetta.Entities.Project", "Project")
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId")
@@ -480,8 +430,6 @@ namespace Progetta.Migrations
                         .IsRequired();
 
                     b.Navigation("AssignedTo");
-
-                    b.Navigation("CreatedBy");
 
                     b.Navigation("Project");
                 });
@@ -507,11 +455,6 @@ namespace Progetta.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("Username");
-                });
-
-            modelBuilder.Entity("Progetta.Entities.Category", b =>
-                {
-                    b.Navigation("Projects");
                 });
 
             modelBuilder.Entity("Progetta.Entities.Project", b =>
@@ -540,8 +483,6 @@ namespace Progetta.Migrations
                     b.Navigation("CollaboratedProjects");
 
                     b.Navigation("Comments");
-
-                    b.Navigation("CreatedTasks");
 
                     b.Navigation("OwnedProjects");
                 });

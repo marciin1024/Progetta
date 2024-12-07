@@ -1,0 +1,110 @@
+﻿@page "/list"
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+@inject TaskService TaskService
+<h3>Lista</h3>
+<br />
+
+<button
+    type="button"
+    class="btn btn-primary"
+    @onclick="AddTask">
+    Dodaj zadanie
+</button>
+<br />
+
+@if (taskList != null && taskList.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa Zadania</th>
+                <th>Priorytet</th>
+                <th>Status</th>
+                <th>Termin</th>
+                <th>Przydzielono do:</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in taskList)
+            {
+                <tr>
+                    <td>
+                        @if (task.Status != Status.Done)
+                        {
+                            <input type="text" class="form-control border-0"
+                            @bind-value="@task.Name" @bind-value:event="oninput" 
+                            @onblur="() => HandleOnChange(task)" />
+                        }
+                        else
+                        {
+                            <input type="text" 
+                            class="form-control border-0 text-decoration-line-through"
+                            @bind-value="@task.Name" @bind-value:event="oninput"
+                            @onblur="() => HandleOnChange(task)" disabled />
+                        }
+
+                    </td>
+                    <td>
+                        @task.Priority
+                    </td>
+                    <td>
+                        <select class="form-control" value="@task.Status.ToString()" 
+                                @onchange="(e) => HandleStatusChange(task, e.Value?.ToString())">
+                            @foreach (var status in Enum.GetValues<Status>())
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </select>
+                    </td>
+                    <td>@task.DueDate</td>
+                    <td>@task.AssignedToId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (taskList == null)
+{
+    <p>Ładowanie danych...</p>
+}
+else
+{
+    <p>Brak zadań do wyświetlenia.</p>
+}
+
+
+@code {
+    private List<TaskToDo>? taskList;
+    private Status selectedStatus;
+    private List<Status> statusList;
+    private TaskToDo task;
+
+    protected override async Task OnInitializedAsync()
+    {   
+        taskList = await TaskService.GetAllTasksToDoAsync();
+        statusList = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
+    }
+
+    private async Task AddTask()
+    {
+        
+        await TaskService.AddTaskAsync(new TaskToDo { Name = "Nowe zadanie", ProjectId = 1 });
+        taskList = await TaskService.GetAllTasksToDoAsync();
+        
+    }
+
+    private async Task HandleOnChange(TaskToDo task)
+    {
+        await TaskService.UpdateTaskToDoAsync(task);
+    }
+
+    private async Task HandleStatusChange(TaskToDo task, string? newValue)
+    {
+        if (Enum.TryParse(typeof(Status), newValue, out var newStatus))
+        {
+            task.Status = (Status)newStatus!;
+            await TaskService.UpdateTaskToDoAsync(task);
+        }
+    }
+}

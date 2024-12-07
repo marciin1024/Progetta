@@ -1,0 +1,81 @@
+﻿@page "/kanban"
+<h3>Kanban</h3>
+
+<div class="row my-4">
+    <!-- Kolumna ToDo -->
+    <div class="col-4">
+        <h2>@Status.ToDo</h2>
+        <div class="dropzone bg-light p-3 my-3 border border-1 rounded"
+             ondragover="event.preventDefault();"
+             @ondrop="@(() => OnDrop(Status.ToDo))">
+            @foreach (var task in taskList.Where(t => t.Status == Status.ToDo))
+            {
+                <div class="draggable alert alert-primary" draggable="true"
+                     @ondragstart="@(() => OnDragStart(task))">
+                    <strong>@task.Name</strong>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Kolumna InProgress -->
+    <div class="col-4">
+        <h2>@Status.InProgress</h2>
+        <div class="dropzone bg-light p-3 my-3 border border-1 rounded"
+             ondragover="event.preventDefault();"
+             @ondrop="@(() => OnDrop(Status.InProgress))">
+            @foreach (var task in taskList.Where(t => t.Status == Status.InProgress))
+            {
+                <div class="draggable alert alert-warning" draggable="true"
+                     @ondragstart="@(() => OnDragStart(task))">
+                    <strong>@task.Name</strong>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Kolumna Done -->
+    <div class="col-4">
+        <h2>@Status.Done</h2>
+        <div class="dropzone bg-light p-3 my-3 border border-1 rounded"
+             ondragover="event.preventDefault();"
+             @ondrop="@(() => OnDrop(Status.Done))">
+            @foreach (var task in taskList.Where(t => t.Status == Status.Done))
+            {
+                <div class="draggable alert alert-success" draggable="true"
+                     @ondragstart="@(() => OnDragStart(task))">
+                    <strong>@task.Name</strong>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<TaskToDo> taskList = new()
+    {
+        new TaskToDo { Id = 1, Name = "Zadanie 1", Status = Status.ToDo },
+        new TaskToDo { Id = 2, Name = "Zadanie 2", Status = Status.InProgress },
+        new TaskToDo { Id = 3, Name = "Zadanie 3", Status = Status.Done }
+    };
+
+    private TaskToDo? draggedTask;
+
+    private void OnDragStart(TaskToDo task)
+    {
+        Console.WriteLine($"Dragging task: {task.Name}");
+        draggedTask = task;
+    }
+
+    private void OnDrop(Status newStatus)
+    {
+        Console.WriteLine($"Dropping task: {draggedTask?.Name} into {newStatus}");
+        if (draggedTask != null)
+        {
+            draggedTask.Status = newStatus;
+            draggedTask = null;
+            StateHasChanged();
+        }
+    }
+
+}
